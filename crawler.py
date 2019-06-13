@@ -12,17 +12,28 @@ class Crawler:
         data = requests.get(ch_url)
         html = BeautifulSoup(data.text, 'html.parser')
         v_list = list(map(lambda x : x['href'], html.select('div[class="yt-lockup-thumbnail"] a')))
+        if len(v_list) == 0:
+            ch_url = 'https://www.youtube.com/channel/' + channel + '/videos'
+            data = requests.get(ch_url)
+            html = BeautifulSoup(data.text, 'html.parser')
+            v_list = list(map(lambda x : x['href'], html.select('div[class="yt-lockup-thumbnail"] a')))
         return v_list
     def get_channel_name(self, channel):
         ch_url = 'https://www.youtube.com/user/' + channel + '/videos'
         data = requests.get(ch_url)
         html = BeautifulSoup(data.text, 'html.parser')
+        v_list = list(map(lambda x : x['href'], html.select('div[class="yt-lockup-thumbnail"] a')))
+        if len(v_list) == 0:
+            ch_url = 'https://www.youtube.com/channel/' + channel + '/videos'
+            data = requests.get(ch_url)
+            html = BeautifulSoup(data.text, 'html.parser')
+        
+        
         title = html.select('title')[0].getText()
         return title[2:title.find('-')-1]
     def get_videos(self):
         for ch in self.ch_list:
             ch_name = self.get_channel_name(ch)
-            
             if not os.path.exists('out/' + ch_name):
                 os.makedirs('out/' + ch_name)
             files = [f for f in glob.glob('out/' + ch_name+"/*")]
