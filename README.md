@@ -2,7 +2,7 @@
 Simple web crawler to retrieve the last N videos per channel from a list of YouTube channels.
 
 
-## Install system depencences by running
+## Install system and python depencences by running
 ```console
 cat install/requirements.system | xargs sudo apt install
 
@@ -19,4 +19,14 @@ positional arguments:
 
 optional arguments:
   -h, --help  show help message and exit
+```
+
+## Channels file
+The  file containing channels must be a text file with each channel username in a line.
+
+For example:
+```console 
+caseyneistat
+msadaghd
+cadeachave
 ```
