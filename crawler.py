@@ -22,12 +22,14 @@ class Crawler:
     def get_videos(self):
         for ch in self.ch_list:
             ch_name = self.get_channel_name(ch)
+            
             if not os.path.exists('out/' + ch_name):
                 os.makedirs('out/' + ch_name)
-
+            files = [f for f in glob.glob('out/' + ch_name+"/*")]
+            already_dowloaded = map(lambda x:x[-x[::-1].find('-'):-x[::-1].find('.')-1] ,files)
             for video in  self.get_videos_url(ch)[:self.N]:
-                os.system('youtube-dl -o "out/' +ch_name+ '/%(upload_date)s. - %(title)s -' + video[video.find('=')+1:] +  '.%(ext)s" https://www.youtube.com' + video)
-
-c = Crawler(['caseyneistat'], 2)
-c.get_videos()
+                if(video[video.find('=')+1:] not in already_dowloaded):
+                    os.system('youtube-dl -o "out/' +ch_name+ '/%(upload_date)s. - %(title)s -' + video[video.find('=')+1:] +  '.%(ext)s" https://www.youtube.com' + video)
+                else:
+                    print("video " +video[video.find('=')+1:]+" already downloaded")
 
